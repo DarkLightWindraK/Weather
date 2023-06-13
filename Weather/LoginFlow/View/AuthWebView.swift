@@ -77,15 +77,14 @@ class AuthWebViewCoordinator: NSObject, WKNavigationDelegate {
 private extension AuthWebView {
     enum Constants {
         static let urlScheme = "https"
-        static let urlHost = "https"
-        static let urlPath = "https"
+        static let urlHost = "oauth.vk.com"
+        static let urlPath = "/authorize"
         static let urlQueryItems = [
             URLQueryItem(name: "client_id", value: "51672428"),
             URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
             URLQueryItem(name: "display", value: "mobile"),
             URLQueryItem(name: "response_type", value: "token")
         ]
-        static let urlResponsePath = "/blank.html"
     }
 }
 
