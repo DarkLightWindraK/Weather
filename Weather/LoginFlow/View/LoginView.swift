@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct LoginView: View {
+    var loginViewModel: LoginViewModel?
+    
     @State private var loginTextField: String = ""
     @State private var passwordTextField: String = ""
     
@@ -28,15 +30,15 @@ struct LoginView: View {
                             .foregroundColor(.white)
                             .disabled(true)
                     })
-                Button(
-                    action: {},
-                    label: {
-                        Text("Войти через ВКонтакте")
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.blue.cornerRadius(10))
-                            .foregroundColor(.white)
-                    })
+                NavigationLink {
+                    LoginViewFactory.makeVKAuthWebView(viewModel: loginViewModel).navigationBarBackButtonHidden(true)
+                } label: {
+                    Text("Войти через ВКонтакте")
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue.cornerRadius(10))
+                        .foregroundColor(.white)
+                }
             }
             .padding(.top)
             Spacer()

@@ -12,6 +12,12 @@
 		9E20BD862A373B1A0061B14C /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E20BD852A373B1A0061B14C /* LoginView.swift */; };
 		9E20BD882A373B1A0061B14C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E20BD872A373B1A0061B14C /* Assets.xcassets */; };
 		9E20BD8B2A373B1A0061B14C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E20BD8A2A373B1A0061B14C /* Preview Assets.xcassets */; };
+		9E5C3A152A37414E0072FE74 /* AuthWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5C3A142A37414E0072FE74 /* AuthWebView.swift */; };
+		9E5C3A192A3748FC0072FE74 /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5C3A182A3748FC0072FE74 /* WeatherView.swift */; };
+		9EEAE1E62A37C55200AD5E91 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAE1E52A37C55200AD5E91 /* LoginViewModel.swift */; };
+		9EF500782A38770500E548AE /* SessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF500772A38770500E548AE /* SessionStore.swift */; };
+		9EF5007A2A388D2800E548AE /* FlowViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF500792A388D2800E548AE /* FlowViewFactory.swift */; };
+		9EF5007C2A388EEB00E548AE /* LoginViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF5007B2A388EEB00E548AE /* LoginViewFactory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +28,12 @@
 		9E20BD852A373B1A0061B14C /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		9E20BD872A373B1A0061B14C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9E20BD8A2A373B1A0061B14C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		9E5C3A142A37414E0072FE74 /* AuthWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthWebView.swift; sourceTree = "<group>"; };
+		9E5C3A182A3748FC0072FE74 /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
+		9EEAE1E52A37C55200AD5E91 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		9EF500772A38770500E548AE /* SessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStore.swift; sourceTree = "<group>"; };
+		9EF500792A388D2800E548AE /* FlowViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowViewFactory.swift; sourceTree = "<group>"; };
+		9EF5007B2A388EEB00E548AE /* LoginViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewFactory.swift; sourceTree = "<group>"; };
 		ACD4AB063664BA35534F7538 /* Pods-Weather.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Weather.debug.xcconfig"; path = "Target Support Files/Pods-Weather/Pods-Weather.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -66,6 +78,8 @@
 		9E20BD822A373B1A0061B14C /* Weather */ = {
 			isa = PBXGroup;
 			children = (
+				9EF500752A3876F000E548AE /* Services */,
+				9E5C3A162A3748C30072FE74 /* WeatherFlow */,
 				9E20BD922A373B770061B14C /* LoginFlow */,
 				9E20BD912A373B6F0061B14C /* Application */,
 				9E20BD872A373B1A0061B14C /* Assets.xcassets */,
@@ -86,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				9E20BD832A373B1A0061B14C /* WeatherApp.swift */,
+				9EF500792A388D2800E548AE /* FlowViewFactory.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -93,9 +108,60 @@
 		9E20BD922A373B770061B14C /* LoginFlow */ = {
 			isa = PBXGroup;
 			children = (
-				9E20BD852A373B1A0061B14C /* LoginView.swift */,
+				9EEAE1E42A37C39000AD5E91 /* ViewModel */,
+				9E5C3A132A3741290072FE74 /* View */,
 			);
 			path = LoginFlow;
+			sourceTree = "<group>";
+		};
+		9E5C3A132A3741290072FE74 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9E20BD852A373B1A0061B14C /* LoginView.swift */,
+				9E5C3A142A37414E0072FE74 /* AuthWebView.swift */,
+				9EF5007B2A388EEB00E548AE /* LoginViewFactory.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9E5C3A162A3748C30072FE74 /* WeatherFlow */ = {
+			isa = PBXGroup;
+			children = (
+				9E5C3A172A3748D80072FE74 /* View */,
+			);
+			path = WeatherFlow;
+			sourceTree = "<group>";
+		};
+		9E5C3A172A3748D80072FE74 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9E5C3A182A3748FC0072FE74 /* WeatherView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9EEAE1E42A37C39000AD5E91 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				9EEAE1E52A37C55200AD5E91 /* LoginViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		9EF500752A3876F000E548AE /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				9EF500762A3876F700E548AE /* SessionStore */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		9EF500762A3876F700E548AE /* SessionStore */ = {
+			isa = PBXGroup;
+			children = (
+				9EF500772A38770500E548AE /* SessionStore.swift */,
+			);
+			path = SessionStore;
 			sourceTree = "<group>";
 		};
 		B7FB0076917BF6B71A08BCF5 /* Pods */ = {
@@ -239,8 +305,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E5C3A152A37414E0072FE74 /* AuthWebView.swift in Sources */,
 				9E20BD862A373B1A0061B14C /* LoginView.swift in Sources */,
+				9EF500782A38770500E548AE /* SessionStore.swift in Sources */,
 				9E20BD842A373B1A0061B14C /* WeatherApp.swift in Sources */,
+				9EEAE1E62A37C55200AD5E91 /* LoginViewModel.swift in Sources */,
+				9EF5007C2A388EEB00E548AE /* LoginViewFactory.swift in Sources */,
+				9EF5007A2A388D2800E548AE /* FlowViewFactory.swift in Sources */,
+				9E5C3A192A3748FC0072FE74 /* WeatherView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
