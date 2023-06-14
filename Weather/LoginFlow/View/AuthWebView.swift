@@ -14,7 +14,6 @@ struct AuthWebView: UIViewRepresentable {
         urlComponents.scheme = Constants.urlScheme
         urlComponents.host = Constants.urlHost
         urlComponents.path = Constants.urlPath
-        
         urlComponents.queryItems = Constants.urlQueryItems
         
         let request = URLRequest(url: urlComponents.url!)
