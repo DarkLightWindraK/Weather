@@ -28,8 +28,11 @@ struct AuthWebView: UIViewRepresentable {
     func makeCoordinator() -> AuthWebViewCoordinator {
         let coordinator = AuthWebViewCoordinator()
         
-        coordinator.onTokenReceived = { token in
-            self.loginViewModel?.updateSession(token: token)
+        coordinator.onTokenReceived = { (token, time) in
+            self.loginViewModel?.updateSession(
+                token: token,
+                expirationTime: time
+            )
         }
         
         return coordinator
@@ -38,7 +41,7 @@ struct AuthWebView: UIViewRepresentable {
 
 class AuthWebViewCoordinator: NSObject, WKNavigationDelegate {
     
-    var onTokenReceived: ((_ token: String) -> Void)?
+    var onTokenReceived: ((_ token: String, _ time: TimeInterval) -> Void)?
     
     func webView(
         _ webView: WKWebView,
@@ -66,8 +69,11 @@ class AuthWebViewCoordinator: NSObject, WKNavigationDelegate {
                 return dict
             }
         
-        if let token = params[Constants.accessTokenQueryParameter] {
-            onTokenReceived?(token)
+        if
+            let token = params[Constants.accessTokenQueryParameter],
+            let time = TimeInterval(params[Constants.expireTimeToken] ?? "")
+        {
+            onTokenReceived?(token, time)
         }
         
         decisionHandler(.cancel)
@@ -92,5 +98,6 @@ private extension AuthWebViewCoordinator {
     enum Constants {
         static let urlResponsePath = "/blank.html"
         static let accessTokenQueryParameter = "access_token"
+        static let expireTimeToken = "expires_in"
     }
 }

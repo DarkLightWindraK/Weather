@@ -8,7 +8,13 @@ class LoginViewModel: ObservableObject {
         self.sessionStore = sessionStore
     }
     
-    func updateSession(token: String) {
-        sessionStore.token = token
+    func updateSession(
+        token: String,
+        expirationTime: TimeInterval
+    ) {
+        sessionStore.updateToken(
+            token: token,
+            expirationTime: expirationTime
+        )
     }
 }

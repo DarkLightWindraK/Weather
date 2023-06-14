@@ -6,7 +6,7 @@ struct WeatherApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if sessionStore.token != nil {
+            if sessionStore.isUserLoggedIn {
                 NavigationView {
                     FlowViewFactory.makeWeatherView()
                 }
