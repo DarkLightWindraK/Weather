@@ -2,7 +2,7 @@ import SwiftUI
 
 @main
 struct WeatherApp: App {
-    @ObservedObject var sessionStore: SessionStore = .init()
+    @StateObject private var sessionStore: SessionStore = .init()
     
     var body: some Scene {
         WindowGroup {
