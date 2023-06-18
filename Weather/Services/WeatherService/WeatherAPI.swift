@@ -2,9 +2,14 @@ import Foundation
 import Moya
 
 enum WeatherAPI {
-    case getCurrentWeather(
+    case getWeatherByCoordinates(
         latitude: Double,
-        longitude: Double
+        longitude: Double,
+        days: Int
+    )
+    case getWeatherByCity(
+        city: String,
+        days: Int
     )
 }
 
@@ -13,25 +18,37 @@ extension WeatherAPI: TargetType {
     
     var path: String {
         switch self {
-        case .getCurrentWeather:
-            return "/current.json"
+        case .getWeatherByCoordinates, .getWeatherByCity:
+            return "/forecast.json"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .getCurrentWeather:
+        case .getWeatherByCoordinates, .getWeatherByCity:
             return .get
         }
     }
     
     var task: Task {
         switch self {
-        case let .getCurrentWeather(latitude, longitude):
+        case let .getWeatherByCoordinates(latitude, longitude, days):
             return .requestParameters(
                 parameters: [
                     "key": Constants.apiKey,
-                    "q": "\(latitude),\(longitude)"
+                    "q": "\(latitude),\(longitude)",
+                    "days": days,
+                    "lang": "ru"
+                ],
+                encoding: URLEncoding.queryString
+            )
+        case let .getWeatherByCity(city, days):
+            return .requestParameters(
+                parameters: [
+                    "key": Constants.apiKey,
+                    "q": "\(city)",
+                    "days": days,
+                    "lang": "ru"
                 ],
                 encoding: URLEncoding.queryString
             )

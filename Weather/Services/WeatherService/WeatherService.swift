@@ -5,14 +5,26 @@ import Combine
 class WeatherService {
     private let apiClient = MoyaProvider<WeatherAPI>()
     
-    func getCurrentWeather(
+    func getWeatherByCoordinates(
         latitude: Double,
-        longitude: Double
-    ) -> AnyPublisher<CurrentWeather, Error> {
-        apiClient.requestPublisher(.getCurrentWeather(latitude: latitude, longitude: longitude))
-            .map({ $0.data })
+        longitude: Double,
+        numberOfDays: Int = 1
+    ) -> AnyPublisher<WeatherResponse, Error> {
+        apiClient
+            .requestPublisher(.getWeatherByCoordinates(latitude: latitude, longitude: longitude, days: numberOfDays))
+            .map(\.data)
             .decode(type: WeatherResponse.self, decoder: JSONDecoder())
-            .map { WeatherMapper.map(response: $0) }
+            .eraseToAnyPublisher()
+    }
+    
+    func getWeatherByCity(
+        for city: String,
+        numberOfDays: Int = 1
+    ) -> AnyPublisher<WeatherResponse, Error> {
+        apiClient
+            .requestPublisher(.getWeatherByCity(city: city, days: numberOfDays))
+            .map(\.data)
+            .decode(type: WeatherResponse.self, decoder: JSONDecoder())
             .eraseToAnyPublisher()
     }
 }
