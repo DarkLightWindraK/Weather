@@ -7,6 +7,7 @@ class WeatherViewModel: NSObject, ObservableObject {
     @Published var currentCity: String?
     @Published var currentWeather: CurrentWeatherModel?
     @Published var hourlyForecast: [OneHourForecastModel] = []
+    @Published var status: Status = .loading
     
     private let weatherService = WeatherService()
     private let locationService = CLLocationManager()
@@ -58,8 +59,9 @@ private extension WeatherViewModel {
                 }
             } receiveValue: { [weak self] response in
                 self?.currentCity = response.location.name
-                self?.currentWeather = WeatherMapper.mapToCurrentWeather(response: response)
-                self?.hourlyForecast = WeatherMapper.mapToHourlyForecastArray(response: response)
+                self?.currentWeather = WeatherMapper.mapToCurrentWeather(response: response.current)
+                self?.hourlyForecast = self?.getRelevantFiveHoursForecast(response: response.forecast) ?? []
+                self?.status = .ready
             }
             .store(in: &cancellables)
     }
@@ -79,8 +81,33 @@ private extension WeatherViewModel {
                 }
             } receiveValue: { [weak self] response in
                 self?.currentCity = response.location.name
-                self?.currentWeather = WeatherMapper.mapToCurrentWeather(response: response)
-                self?.hourlyForecast = WeatherMapper.mapToHourlyForecastArray(response: response)
+                self?.currentWeather = WeatherMapper.mapToCurrentWeather(response: response.current)
+                self?.hourlyForecast = self?.getRelevantFiveHoursForecast(response: response.forecast) ?? []
+                self?.status = .ready
             }.store(in: &cancellables)
+    }
+    
+    func getRelevantFiveHoursForecast(response: WeatherForecast) -> [OneHourForecastModel] {
+        let hourArray = WeatherMapper.mapToHourlyForecastArray(response: response)
+        let now = Calendar.current.component(.hour, from: Date())
+        let index = hourArray.firstIndex { model in
+            guard let modelHours = Int(model.time.components(separatedBy: ":").first ?? "") else { return false }
+            
+            return modelHours > now
+        }
+        
+        guard let index else { return [] }
+        
+        if index + 4 < hourArray.count {
+            return Array(hourArray[index...index+4])
+        } else {
+            return Array(hourArray[index...])
+        }
+    }
+}
+
+extension WeatherViewModel {
+    enum Status {
+        case loading, ready, fail
     }
 }

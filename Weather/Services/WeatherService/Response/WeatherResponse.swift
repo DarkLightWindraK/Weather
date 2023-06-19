@@ -22,23 +22,25 @@ struct Location: Decodable {
 
 struct WeatherCondition: Decodable {
     let description: String
-    let icon: String
+    let code: Int
     
     enum CodingKeys: String, CodingKey {
         case description = "text"
-        case icon
+        case code
     }
 }
 
 struct CurrentWeather: Decodable {
     let temperature: Double
     let condition: WeatherCondition
+    let isDay: Int
     let wind: Double
     let pressure: Double
     let humidity: Int
     
     enum CodingKeys: String, CodingKey {
         case condition, humidity
+        case isDay = "is_day"
         case temperature = "temp_c"
         case wind = "wind_kph"
         case pressure = "pressure_mb"
@@ -50,12 +52,14 @@ struct HourForecast: Decodable {
     let unixTime: Int
     let temperature: Double
     let condition: WeatherCondition
+    let isDay: Int
     let wind: Double
     let pressure: Double
     let humidity: Int
     
     enum CodingKeys: String, CodingKey {
         case time, condition, humidity
+        case isDay = "is_day"
         case unixTime = "time_epoch"
         case temperature = "temp_c"
         case wind = "wind_kph"
