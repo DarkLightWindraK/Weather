@@ -49,13 +49,12 @@ private extension WeatherView {
     
     func makeCurrentWeatherView() -> some View {
         VStack(spacing: 48) {
-            Text("\(viewModel.currentWeather?.temperature ?? 0)°")
-                .font(.system(size: 96))
-                .bold()
             Text(viewModel.currentWeather?.state ?? "")
                 .font(.system(size: 26))
                 .bold()
-                .padding(.bottom)
+            Text("\(viewModel.currentWeather?.temperature ?? 0)°")
+                .font(.system(size: 96))
+                .bold()
             HStack(spacing: 96) {
                 VStack(alignment: .leading, spacing: 14) {
                     Text("Влажность: \(viewModel.currentWeather?.humidity ?? 0)%")
@@ -81,6 +80,7 @@ private extension WeatherView {
         .background(Constants.currentWeatherViewColor)
         .foregroundColor(.white)
         .cornerRadius(30)
+        .shadow(radius: 20)
     }
     
     func makeNext5hoursInfoView() -> some View {
