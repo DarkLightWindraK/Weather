@@ -30,13 +30,13 @@ extension WeatherViewModel: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
             self.location = location
-            getWeatherByCoordinates(numberOfDays: 2)
+            getWeatherByCoordinates(numberOfDays: 7)
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Не удалось определить местоположение. Запрос для стандартного города")
-        getWeatherByCity(city: "Moscow", numberOfDays: 2)
+        getWeatherByCity(city: "Moscow", numberOfDays: 7)
     }
 }
 
@@ -60,7 +60,7 @@ private extension WeatherViewModel {
             } receiveValue: { [weak self] response in
                 self?.currentCity = response.location.name
                 self?.currentWeather = WeatherMapper.mapToCurrentWeather(response: response.current)
-                self?.hourlyForecast = self?.getRelevantFiveHoursForecast(response: response.forecast) ?? []
+                self?.hourlyForecast = self?.getRelevantHourlyForecast(response: response.forecast) ?? []
                 self?.status = .ready
             }
             .store(in: &cancellables)
@@ -82,27 +82,19 @@ private extension WeatherViewModel {
             } receiveValue: { [weak self] response in
                 self?.currentCity = response.location.name
                 self?.currentWeather = WeatherMapper.mapToCurrentWeather(response: response.current)
-                self?.hourlyForecast = self?.getRelevantFiveHoursForecast(response: response.forecast) ?? []
+                self?.hourlyForecast = self?.getRelevantHourlyForecast(response: response.forecast) ?? []
                 self?.status = .ready
             }.store(in: &cancellables)
     }
     
-    func getRelevantFiveHoursForecast(response: WeatherForecast) -> [OneHourForecastModel] {
-        let hourArray = WeatherMapper.mapToHourlyForecastArray(response: response)
-        let now = Calendar.current.component(.hour, from: Date())
-        let index = hourArray.firstIndex { model in
-            guard let modelHours = Int(model.time.components(separatedBy: ":").first ?? "") else { return false }
-            
-            return modelHours > now
-        }
+    func getRelevantHourlyForecast(response: WeatherForecast) -> [OneHourForecastModel] {
+        let hourlyForecastArray = WeatherMapper.mapToHourlyForecastArray(response: response)
+        let nextHourDate = Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
+        let nextHour = Calendar.current.component(.hour, from: nextHourDate)
         
-        guard let index else { return [] }
+        guard nextHour < hourlyForecastArray.count else { return [] }
         
-        if index + 4 < hourArray.count {
-            return Array(hourArray[index...index+4])
-        } else {
-            return Array(hourArray[index...])
-        }
+        return Array(hourlyForecastArray[nextHour...])
     }
 }
 

@@ -94,7 +94,7 @@ private extension WeatherView {
     func makeHourlyForecastView() -> some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                ForEach(viewModel.hourlyForecast) { item in
+                ForEach(viewModel.hourlyForecast.prefix(5)) { item in
                     WeatherHourCell(
                         time: item.time,
                         temperature: item.temperature,
