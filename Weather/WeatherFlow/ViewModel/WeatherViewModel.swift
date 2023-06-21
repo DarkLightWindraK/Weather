@@ -18,25 +18,35 @@ class WeatherViewModel: NSObject, ObservableObject {
         super.init()
         locationService.desiredAccuracy = kCLLocationAccuracyBest
         locationService.delegate = self
-        locationService.requestWhenInUseAuthorization()
     }
     
     func requestWeather() {
-        locationService.requestLocation()
+        locationService.requestWhenInUseAuthorization()
     }
 }
 
 extension WeatherViewModel: CLLocationManagerDelegate {
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        switch manager.authorizationStatus {
+        case .denied, .restricted:
+            getWeatherByCity(city: "Moscow", numberOfDays: 7)
+        case .authorizedWhenInUse, .authorizedAlways:
+            manager.startUpdatingLocation()
+        default:
+            break
+        }
+    }
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
             self.location = location
             getWeatherByCoordinates(numberOfDays: 7)
+            manager.stopUpdatingLocation()
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Не удалось определить местоположение. Запрос для стандартного города")
-        getWeatherByCity(city: "Moscow", numberOfDays: 7)
+        print(error.localizedDescription)
     }
 }
 
