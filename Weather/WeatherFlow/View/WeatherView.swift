@@ -102,7 +102,7 @@ private extension WeatherView {
                     )
                 }
             }
+            .padding(.horizontal)
         }
-        .padding(.horizontal)
     }
 }
