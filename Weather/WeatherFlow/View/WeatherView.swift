@@ -5,20 +5,23 @@ struct WeatherView: View {
     @StateObject private var viewModel = WeatherViewModel()
     
     var body: some View {
-        VStack {
-            if viewModel.status == .loading {
-                showLoadingView()
-            } else if viewModel.status == .ready {
-                makeTitleView()
-                makeCurrentWeatherView()
-                Spacer()
-                makeNext5hoursInfoView()
-                Spacer()
-                makeHourlyForecastView()
+        if viewModel.status == .loading {
+            showLoadingView()
+                .onAppear {
+                    viewModel.requestCurrentForecast()
+                }
+        } else if viewModel.status == .ready {
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack {
+                    VStack {
+                        makeCityView()
+                        makeCurrentWeatherView()
+                    }
+                    .padding(.horizontal)
+                    makeNext5hoursInfoView()
+                    makeHourlyForecastView()
+                }
             }
-        }
-        .onAppear {
-            viewModel.requestWeather()
         }
     }
 }
@@ -40,69 +43,71 @@ private extension WeatherView {
             .scaleEffect(x: 2, y: 2, anchor: .center)
     }
     
-    func makeTitleView() -> some View {
+    func makeCityView() -> some View {
         Text(viewModel.currentCity ?? "")
-            .padding()
-            .font(.title2)
+            .font(.title3)
             .bold()
     }
     
     func makeCurrentWeatherView() -> some View {
         VStack(spacing: 48) {
             Text(viewModel.currentWeather?.state ?? "")
-                .font(.system(size: 26))
+                .font(.system(size: 22))
                 .bold()
             Text("\(viewModel.currentWeather?.temperature ?? 0)°")
-                .font(.system(size: 96))
-                .bold()
-            HStack(spacing: 96) {
-                VStack(alignment: .leading, spacing: 14) {
+                .font(.system(size: 84))
+            HStack {
+                VStack(alignment: .leading, spacing: 8) {
                     Text("Влажность: \(viewModel.currentWeather?.humidity ?? 0)%")
                         .font(.system(size: 20))
-                        .bold()
                     Text("Ветер: \(viewModel.currentWeather?.wind ?? 0) м/с")
                         .font(.system(size: 20))
-                        .bold()
-                    Text("Давление:\n\(viewModel.currentWeather?.pressure ?? 0) мм рт/ст")
+                    Text("Давление: \n\(viewModel.currentWeather?.pressure ?? 0) мм рт/ст")
                         .font(.system(size: 20))
-                        .bold()
                 }
-                ImageStorage
-                    .getImageByCode(
-                        imageCode: viewModel.currentWeather?.imageCode ?? 1000,
-                        isDay: viewModel.currentWeather?.isDay ?? 1
-                    )
+                Spacer()
+                Image(systemName: viewModel.currentWeather?.weatherImage?.rawValue ?? "")
                     .resizable()
+                    .aspectRatio(contentMode: .fit)
                     .frame(width: 100, height: 100)
             }
         }
-        .frame(width: 400, height: 425)
-        .background(Constants.currentWeatherViewColor)
+        .padding()
         .foregroundColor(.white)
+        .background(.indigo)
         .cornerRadius(30)
-        .shadow(radius: 20)
     }
     
     func makeNext5hoursInfoView() -> some View {
-        Text("Следующие 5 часов:")
-            .bold()
-            .font(.system(size: 20))
+        Text(("Следующие 5 часов"))
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading)
+            .padding()
+            .font(.system(size: 20))
+            .bold()
     }
     
     func makeHourlyForecastView() -> some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack {
-                ForEach(viewModel.hourlyForecast.prefix(5)) { item in
-                    WeatherHourCell(
-                        time: item.time,
-                        temperature: item.temperature,
-                        image: ImageStorage.getImageByCode(imageCode: item.imageCode, isDay: item.isDay)
-                    )
+            HStack(spacing: 16) {
+                ForEach(viewModel.hourlyForecast) { item in
+                    VStack(spacing: 36) {
+                        Text(item.time)
+                            .font(.system(size: 24))
+                        Image(systemName: item.weatherImage?.rawValue ?? "")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 50, height: 50)
+                        Text("\(item.temperature)°")
+                            .font(.system(size: 22))
+                    }
+                    .padding(36)
+                    .foregroundColor(.white)
+                    .background(Color(red: 56/255, green: 77/255, blue: 104/255))
+                    .cornerRadius(30)
                 }
             }
             .padding(.horizontal)
+            .padding(.bottom)
         }
     }
 }
