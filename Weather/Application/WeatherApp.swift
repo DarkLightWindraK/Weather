@@ -8,7 +8,7 @@ struct WeatherApp: App {
         WindowGroup {
             NavigationView {
                 if sessionStore.isUserLoggedIn {
-                    FlowViewFactory.makeWeatherView()
+                    WeatherView()
                 } else {
                     FlowViewFactory.makeLoginView(sessionStore: sessionStore)
                 }

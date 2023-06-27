@@ -10,8 +10,4 @@ enum FlowViewFactory {
         view.loginViewModel = viewModel
         return view
     }
-    
-    static func makeWeatherView() -> some View {
-        WeatherView()
-    }
 }

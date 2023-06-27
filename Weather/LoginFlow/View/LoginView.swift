@@ -64,7 +64,9 @@ private extension LoginView {
     
     func makeVKLoginButton() -> some View {
         NavigationLink {
-            LoginViewFactory.makeVKAuthWebView(viewModel: loginViewModel).navigationBarBackButtonHidden(true)
+            LoginViewFactory
+                .makeVKAuthWebView(viewModel: loginViewModel)
+                .navigationBarBackButtonHidden(true)
         } label: {
             Text("Войти через ВКонтакте")
                 .padding()

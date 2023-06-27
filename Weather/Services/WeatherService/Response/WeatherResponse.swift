@@ -7,7 +7,7 @@ struct Location: Decodable {
     let latitude: Double
     let longitude: Double
     let timeZone: String
-    let unixLocalTime: Int
+    let unixLocalTime: Double
     let localTime: String
     
     enum CodingKeys: String, CodingKey {
@@ -49,7 +49,7 @@ struct CurrentWeather: Decodable {
 
 struct HourForecast: Decodable {
     let time: String
-    let unixTime: Int
+    let unixTime: Double
     let temperature: Double
     let condition: WeatherCondition
     let isDay: Int
@@ -68,10 +68,12 @@ struct HourForecast: Decodable {
 }
 
 struct DayForecast: Decodable {
-    let hours: [HourForecast]
+    let unixDate: Double
+    var hours: [HourForecast]
     
     enum CodingKeys: String, CodingKey {
         case hours = "hour"
+        case unixDate = "date_epoch"
     }
 }
 

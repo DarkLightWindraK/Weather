@@ -2,61 +2,69 @@ import Foundation
 import Moya
 import Combine
 
-class WeatherService {
-    private let apiClient = MoyaProvider<WeatherAPI>()
-    
-    func getForecastByCoordinates(
+protocol WeatherService {
+    func getShortForecastByCoordinates(
         latitude: Double,
         longitude: Double
-    ) -> AnyPublisher<WeatherModel?, Error> {
+    ) -> AnyPublisher<ShortForecastModel?, Never>
+    
+    func getShortForecastByCity(
+        for city: String
+    ) -> AnyPublisher<ShortForecastModel?, Never>
+    
+    func getForecastDetailsByCity(
+        for city: String
+    ) -> AnyPublisher<DetailForecastModel?, Never>
+    
+    func getRelevantForecast(forecast: [HourForecastModel]) -> [HourForecastModel]
+}
+
+class WeatherServiceImpl: WeatherService {
+    private let apiClient = MoyaProvider<WeatherAPI>()
+    
+    func getShortForecastByCoordinates(
+        latitude: Double,
+        longitude: Double
+    ) -> AnyPublisher<ShortForecastModel?, Never> {
         apiClient
             .requestPublisher(.getWeatherByCoordinates(latitude: latitude, longitude: longitude, days: 2))
             .map(\.data)
             .decode(type: WeatherResponse.self, decoder: JSONDecoder())
-            .map({ [weak self] response in
-                let location = WeatherMapper.mapToLocationModel(response: response.location)
-                let current = WeatherMapper.mapToCurrentWeather(response: response.current)
-                let hourlyForecast = WeatherMapper.mapToHourlyForecastArray(response: response.forecast)
-                return WeatherModel(
-                    location: location,
-                    current: current,
-                    hourlyForecast: self?.getRelevantForecast(
-                        hourlyForecast: hourlyForecast
-                    ) ?? []
-                )
-            })
+            .map { WeatherMapper.responseToShortForecastModel(response: $0) }
+            .replaceError(with: nil)
             .eraseToAnyPublisher()
     }
     
-    func getForecastByCity(
+    func getShortForecastByCity(
         for city: String
-    ) -> AnyPublisher<WeatherModel?, Error> {
+    ) -> AnyPublisher<ShortForecastModel?, Never> {
         apiClient
             .requestPublisher(.getWeatherByCity(city: city, days: 2))
             .map(\.data)
             .decode(type: WeatherResponse.self, decoder: JSONDecoder())
-            .map({ [weak self] response in
-                let location = WeatherMapper.mapToLocationModel(response: response.location)
-                let current = WeatherMapper.mapToCurrentWeather(response: response.current)
-                let hourlyForecast = WeatherMapper.mapToHourlyForecastArray(response: response.forecast)
-                return WeatherModel(
-                    location: location,
-                    current: current,
-                    hourlyForecast: self?.getRelevantForecast(
-                        hourlyForecast: hourlyForecast
-                    ) ?? []
-                )
-            })
+            .map { WeatherMapper.responseToShortForecastModel(response: $0) }
+            .replaceError(with: nil)
             .eraseToAnyPublisher()
     }
-}
-
-private extension WeatherService {
-    func getRelevantForecast(hourlyForecast: [OneHourForecastModel]) -> [OneHourForecastModel] {
+    
+    func getForecastDetailsByCity(
+        for city: String
+    ) -> AnyPublisher<DetailForecastModel?, Never> {
+        apiClient
+            .requestPublisher(.getWeatherByCity(city: city, days: 14))
+            .map(\.data)
+            .decode(type: WeatherResponse.self, decoder: JSONDecoder())
+            .map { WeatherMapper.responseToForecastDetails(response: $0) }
+            .replaceError(with: nil)
+            .eraseToAnyPublisher()
+    }
+    
+    func getRelevantForecast(forecast: [HourForecastModel]) -> [HourForecastModel] {
         let nextHourDate = Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
         let nextHour = Calendar.current.component(.hour, from: nextHourDate)
-        guard nextHour < hourlyForecast.count else { return [] }
         
-        return Array(hourlyForecast[nextHour...])
+        guard nextHour < forecast.count else { return [] }
+        
+        return Array(forecast[nextHour...])
     }
 }
