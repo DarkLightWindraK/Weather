@@ -98,7 +98,7 @@ private extension WeatherView {
             HStack(spacing: 16) {
                 ForEach(viewModel.hourlyForecast.prefix(5)) { item in
                     NavigationLink {
-                        WeatherDetailsView()
+                        WeatherFlowFactory.makeWeatherDetailsScreen(currentCity: viewModel.currentCity ?? "")
                     } label: {
                         VStack(spacing: 36) {
                             Text(hourFormatter.string(from: Date(timeIntervalSince1970: item.time)))
