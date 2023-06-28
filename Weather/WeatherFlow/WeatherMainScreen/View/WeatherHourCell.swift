@@ -2,33 +2,41 @@ import SwiftUI
 
 struct WeatherHourCell: View {
     
-    private let time: String
+    private let time: TimeInterval
     private let temperature: Int
-    private let image: Image
+    private let systemImageName: SystemName
+    
+    private var hourFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ru-RU")
+        formatter.dateFormat = "HH:mm"
+        return formatter
+    }
     
     init(
-        time: String,
+        time: TimeInterval,
         temperature: Int,
-        image: Image
+        systemImageName: SystemName
     ) {
         self.time = time
         self.temperature = temperature
-        self.image = image
+        self.systemImageName = systemImageName
     }
     
     var body: some View {
-        VStack(spacing: 48) {
-            Text(time)
+        VStack(spacing: 36) {
+            Text(hourFormatter.string(from: Date(timeIntervalSince1970: time)))
                 .font(.system(size: 24))
-            image
+            Image(systemName: systemImageName)
                 .resizable()
+                .aspectRatio(contentMode: .fit)
                 .frame(width: 50, height: 50)
             Text("\(temperature)°")
                 .font(.system(size: 22))
         }
-        .frame(width: 150, height: 250)
-        .background(Constants.cellViewColor)
-        .foregroundColor(Color.white)
+        .padding(36)
+        .foregroundColor(.white)
+        .background(Color(red: 56/255, green: 77/255, blue: 104/255))
         .cornerRadius(30)
     }
 }
@@ -36,9 +44,9 @@ struct WeatherHourCell: View {
 struct WeatherHourRow_Previews: PreviewProvider {
     static var previews: some View {
         WeatherHourCell(
-            time: "14:00",
+            time: Date().timeIntervalSince1970,
             temperature: 27,
-            image: Image(systemName: "sun.max.fill")
+            systemImageName: "sun.max.fill"
         )
     }
 }

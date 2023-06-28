@@ -100,20 +100,11 @@ private extension WeatherView {
                     NavigationLink {
                         WeatherFlowFactory.makeWeatherDetailsScreen(currentCity: viewModel.currentCity ?? "")
                     } label: {
-                        VStack(spacing: 36) {
-                            Text(hourFormatter.string(from: Date(timeIntervalSince1970: item.time)))
-                                .font(.system(size: 24))
-                            Image(systemName: item.indicators.weatherImage?.rawValue ?? "")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 50, height: 50)
-                            Text("\(item.indicators.temperature)°")
-                                .font(.system(size: 22))
-                        }
-                        .padding(36)
-                        .foregroundColor(.white)
-                        .background(Color(red: 56/255, green: 77/255, blue: 104/255))
-                        .cornerRadius(30)
+                        WeatherHourCell(
+                            time: item.time,
+                            temperature: item.indicators.temperature,
+                            systemImageName: item.indicators.weatherImage?.rawValue ?? ""
+                        )
                     }
 
                 }
