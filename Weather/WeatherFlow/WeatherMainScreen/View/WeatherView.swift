@@ -29,6 +29,9 @@ struct WeatherView: View {
                     makeHourlyForecastView()
                 }
             }
+            .onChange(of: viewModel.currentCity ?? "") { newValue in
+                viewModel.updateWeatherByCity(city: newValue)
+            }
         }
     }
 }
@@ -51,9 +54,18 @@ private extension WeatherView {
     }
     
     func makeCityView() -> some View {
-        Text(viewModel.currentCity ?? "")
-            .font(.title3)
-            .bold()
+        NavigationLink {
+            CityPicker(currentCity: $viewModel.currentCity)
+        } label: {
+            HStack {
+                Text(viewModel.currentCity ?? "")
+                    .font(.title3)
+                    .bold()
+                    .foregroundColor(.black)
+                Image(systemName: "square.and.pencil")
+                    .foregroundColor(.black.opacity(0.5))
+            }
+        }
     }
     
     func makeCurrentWeatherView() -> some View {

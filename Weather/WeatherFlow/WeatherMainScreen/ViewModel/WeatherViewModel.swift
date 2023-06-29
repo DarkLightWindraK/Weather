@@ -30,6 +30,11 @@ class WeatherViewModel: NSObject, ObservableObject {
             )
         }
     }
+    
+    func updateWeatherByCity(city: String) {
+        status = .loading
+        getWeatherByCity(city: city, numberOfDays: 2)
+    }
 }
 
 private extension WeatherViewModel {
