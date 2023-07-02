@@ -32,7 +32,6 @@ class WeatherServiceImpl: WeatherService {
             .decode(type: WeatherResponse.self, decoder: JSONDecoder())
             .map { WeatherMapper.responseToShortForecastModel(response: $0) }
             .map({ model in
-                let hours = model.nextFewHoursForecast
                 let nextHourDate = Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
                 let nextHour = Calendar.current.component(.hour, from: nextHourDate)
                 

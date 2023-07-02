@@ -1,9 +1,10 @@
 import SwiftUI
 
 struct LoginView: View {
-    @EnvironmentObject private var sessionStore: SessionStore
     @State private var loginTextField: String = ""
     @State private var passwordTextField: String = ""
+    
+    private let viewModel: LoginViewModel = Assembly.shared.resolve()
     
     var body: some View {
         VStack {

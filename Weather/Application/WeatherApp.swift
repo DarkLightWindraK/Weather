@@ -2,7 +2,7 @@ import SwiftUI
 
 @main
 struct WeatherApp: App {
-    @StateObject private var sessionStore: SessionStore = Assembly.shared.resolve()
+    @ObservedObject private var sessionStore: SessionStore = Assembly.shared.resolve()
     
     var body: some Scene {
         WindowGroup {
@@ -12,7 +12,7 @@ struct WeatherApp: App {
                 } else {
                     LoginView()
                 }
-            }.environmentObject(sessionStore)
+            }
         }
     }
 }

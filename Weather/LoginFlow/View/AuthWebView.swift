@@ -4,7 +4,7 @@ import WebKit
 
 struct AuthWebView: UIViewRepresentable {
     
-    @EnvironmentObject private var sessionStore: SessionStore
+    private let viewModel: LoginViewModel = Assembly.shared.resolve()
     
     func makeUIView(context: Context) -> WKWebView {
         let webView = WKWebView()
@@ -28,7 +28,7 @@ struct AuthWebView: UIViewRepresentable {
         let coordinator = AuthWebViewCoordinator()
         
         coordinator.onTokenReceived = { (token, time) in
-            self.sessionStore.updateSession(token: token, expirationTime: time)
+            self.viewModel.updateSession(token: token, expirationTime: time)
         }
         
         return coordinator
