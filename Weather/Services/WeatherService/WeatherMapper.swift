@@ -3,7 +3,11 @@ import Foundation
 enum WeatherMapper {
     
     static func responseToShortForecastModel(response: WeatherResponse) -> ShortForecastModel {
-        let location = LocationModel(city: response.location.name)
+        let location = LocationModel(
+            city: response.location.name,
+            latitude: response.location.latitude,
+            longitude: response.location.longitude
+        )
         let weatherModel = currentWeatherToModel(current: response.current)
         let fewHoursForecast = response.forecast.days.reduce(
             [HourForecastModel]()) { result, nextDay in

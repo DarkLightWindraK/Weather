@@ -72,6 +72,6 @@ struct WeatherDetailsView: View {
 
 struct WeatherDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        WeatherDetailsView(viewModel: WeatherDetailsViewModel(city: "Voronezh"))
+        WeatherDetailsView(viewModel: WeatherDetailsViewModel(location: LocationModel(city: "VRN", latitude: 35, longitude: 35)))
     }
 }

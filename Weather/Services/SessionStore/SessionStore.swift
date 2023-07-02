@@ -14,7 +14,7 @@ class SessionStore: ObservableObject {
         expirationDate = storage.object(forKey: Constants.expirationDate) as? Date
         
         if
-            self.token != nil,
+            token != nil,
             let expirationDate,
             expirationDate > .now
         {
@@ -24,7 +24,7 @@ class SessionStore: ObservableObject {
         }
     }
     
-    func updateToken(
+    func updateSession(
         token: String,
         expirationTime: TimeInterval
     ) {

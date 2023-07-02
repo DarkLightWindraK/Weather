@@ -4,20 +4,24 @@ import Combine
 import CoreLocation
 
 class WeatherViewModel: NSObject, ObservableObject {
-    @Published var currentCity: String?
+    @Published var currentLocation: LocationModel?
     @Published var currentWeather: WeatherModel?
     @Published var hourlyForecast: [HourForecastModel] = []
     @Published var status: Status = .loading
     
-    private let locationService = ServicesAssembly.shared.resolve(LocationService.self)
-    private let weatherService = ServicesAssembly.shared.resolve(WeatherService.self)
+    private let locationService: LocationService
+    private let weatherService: WeatherService
     private var cancellables = Set<AnyCancellable>()
     
+    init(
+        locationService: LocationService,
+        weatherService: WeatherService
+    ) {
+        self.locationService = locationService
+        self.weatherService = weatherService
+    }
+    
     func requestCurrentForecast() {
-        guard let locationService else {
-            fatalError("Dependence \(String(describing: LocationService.self)) not found")
-        }
-        
         locationService.getCurrentLocation { [weak self] location in
             self?.getWeatherByCoordinates(
                 location: location,
@@ -47,8 +51,6 @@ private extension WeatherViewModel {
         location: CLLocation,
         numberOfDays: Int
     ) {
-        guard let weatherService else { fatalError("Dependence \(String(describing: WeatherService.self)) not found") }
-        
         weatherService
             .getShortForecastByCoordinates(
                 latitude: location.coordinate.latitude,
@@ -62,9 +64,9 @@ private extension WeatherViewModel {
                     print(error.localizedDescription)
                 }
             } receiveValue: { [weak self] response in
-                self?.currentCity = response?.location.city
+                self?.currentLocation = response?.location
                 self?.currentWeather = response?.currentWeather
-                self?.hourlyForecast = self?.weatherService?
+                self?.hourlyForecast = self?.weatherService
                     .getRelevantForecast(
                         forecast: response?.nextFewHoursForecast ?? []
                     ) ?? []
@@ -77,8 +79,6 @@ private extension WeatherViewModel {
         city: String,
         numberOfDays: Int
     ) {
-        guard let weatherService else { fatalError("Dependence \(String(describing: WeatherService.self)) not found") }
-        
         weatherService
             .getShortForecastByCity(for: city)
             .sink { [weak self] status in
@@ -90,9 +90,9 @@ private extension WeatherViewModel {
                 self?.status = .fail
                 }
             } receiveValue: { [weak self] response in
-                self?.currentCity = response?.location.city
+                self?.currentLocation = response?.location
                 self?.currentWeather = response?.currentWeather
-                self?.hourlyForecast = self?.weatherService?
+                self?.hourlyForecast = self?.weatherService
                     .getRelevantForecast(
                         forecast: response?.nextFewHoursForecast ?? []
                     ) ?? []

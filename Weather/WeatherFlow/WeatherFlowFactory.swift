@@ -3,9 +3,9 @@ import SwiftUI
 
 enum WeatherFlowFactory {
     static func makeWeatherDetailsScreen(
-        currentCity: String
+        currentLocation: LocationModel
     ) -> some View {
-        let weatherDetailsViewModel = WeatherDetailsViewModel(city: currentCity)
+        let weatherDetailsViewModel = WeatherDetailsViewModel(location: currentLocation)
         let view = WeatherDetailsView(viewModel: weatherDetailsViewModel)
         return view
     }

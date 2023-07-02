@@ -2,7 +2,7 @@ import SwiftUI
 
 @main
 struct WeatherApp: App {
-    @StateObject private var sessionStore: SessionStore = .init()
+    @StateObject private var sessionStore: SessionStore = Assembly.shared.resolve()
     
     var body: some Scene {
         WindowGroup {
@@ -10,9 +10,9 @@ struct WeatherApp: App {
                 if sessionStore.isUserLoggedIn {
                     WeatherView()
                 } else {
-                    FlowViewFactory.makeLoginView(sessionStore: sessionStore)
+                    LoginView()
                 }
-            }
+            }.environmentObject(sessionStore)
         }
     }
 }

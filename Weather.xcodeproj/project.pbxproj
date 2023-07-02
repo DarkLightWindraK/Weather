@@ -30,11 +30,8 @@
 		9ED9BB4E2A4472F600C2F605 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED9BB4D2A4472F600C2F605 /* LocationService.swift */; };
 		9EDEB1FB2A484C5B004E35E2 /* WeatherDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDEB1FA2A484C5B004E35E2 /* WeatherDetailsView.swift */; };
 		9EDEB1FD2A484E41004E35E2 /* WeatherForecastRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDEB1FC2A484E41004E35E2 /* WeatherForecastRow.swift */; };
-		9EE496FC2A4AE8B800A02528 /* ServicesAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE496FB2A4AE8B800A02528 /* ServicesAssembly.swift */; };
-		9EEAE1E62A37C55200AD5E91 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEAE1E52A37C55200AD5E91 /* LoginViewModel.swift */; };
+		9EE496FC2A4AE8B800A02528 /* Assembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE496FB2A4AE8B800A02528 /* Assembly.swift */; };
 		9EF500782A38770500E548AE /* SessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF500772A38770500E548AE /* SessionStore.swift */; };
-		9EF5007A2A388D2800E548AE /* FlowViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF500792A388D2800E548AE /* FlowViewFactory.swift */; };
-		9EF5007C2A388EEB00E548AE /* LoginViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF5007B2A388EEB00E548AE /* LoginViewFactory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,11 +60,8 @@
 		9ED9BB4D2A4472F600C2F605 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		9EDEB1FA2A484C5B004E35E2 /* WeatherDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailsView.swift; sourceTree = "<group>"; };
 		9EDEB1FC2A484E41004E35E2 /* WeatherForecastRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherForecastRow.swift; sourceTree = "<group>"; };
-		9EE496FB2A4AE8B800A02528 /* ServicesAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesAssembly.swift; sourceTree = "<group>"; };
-		9EEAE1E52A37C55200AD5E91 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		9EE496FB2A4AE8B800A02528 /* Assembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assembly.swift; sourceTree = "<group>"; };
 		9EF500772A38770500E548AE /* SessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStore.swift; sourceTree = "<group>"; };
-		9EF500792A388D2800E548AE /* FlowViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowViewFactory.swift; sourceTree = "<group>"; };
-		9EF5007B2A388EEB00E548AE /* LoginViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewFactory.swift; sourceTree = "<group>"; };
 		ACD4AB063664BA35534F7538 /* Pods-Weather.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Weather.debug.xcconfig"; path = "Target Support Files/Pods-Weather/Pods-Weather.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -169,7 +163,6 @@
 			isa = PBXGroup;
 			children = (
 				9E20BD832A373B1A0061B14C /* WeatherApp.swift */,
-				9EF500792A388D2800E548AE /* FlowViewFactory.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -177,8 +170,6 @@
 		9E20BD922A373B770061B14C /* LoginFlow */ = {
 			isa = PBXGroup;
 			children = (
-				9EF5007B2A388EEB00E548AE /* LoginViewFactory.swift */,
-				9EEAE1E42A37C39000AD5E91 /* ViewModel */,
 				9E5C3A132A3741290072FE74 /* View */,
 			);
 			path = LoginFlow;
@@ -197,7 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				9E186C6D2A4CC3B500082914 /* CityPicker */,
-				9EB9A9E22A3C5E1C0003B35F /* Model */,
+				9EB9A9E22A3C5E1C0003B35F /* WeatherModel */,
 				9ED0AB142A4786430047AA86 /* WeatherDetailsScreen */,
 				9ED0AB132A4786320047AA86 /* WeatherMainScreen */,
 				9E97EFBE2A4AF6C9001721C7 /* WeatherFlowFactory.swift */,
@@ -222,13 +213,6 @@
 			path = Response;
 			sourceTree = "<group>";
 		};
-		9E9ADB6B2A49BED30043356E /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		9EAC99212A4D70BB00DAA457 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -237,13 +221,13 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		9EB9A9E22A3C5E1C0003B35F /* Model */ = {
+		9EB9A9E22A3C5E1C0003B35F /* WeatherModel */ = {
 			isa = PBXGroup;
 			children = (
 				9EAF576D2A407A0600921C75 /* WeatherImage.swift */,
 				9E6CE1652A3F182500172581 /* WeatherModel.swift */,
 			);
-			path = Model;
+			path = WeatherModel;
 			sourceTree = "<group>";
 		};
 		9ECB70A12A3B9A66009EF2C0 /* ViewModel */ = {
@@ -268,7 +252,6 @@
 		9ED0AB132A4786320047AA86 /* WeatherMainScreen */ = {
 			isa = PBXGroup;
 			children = (
-				9E9ADB6B2A49BED30043356E /* Model */,
 				9ECB70A12A3B9A66009EF2C0 /* ViewModel */,
 				9E5C3A172A3748D80072FE74 /* View */,
 			);
@@ -304,17 +287,9 @@
 		9EE496FA2A4AE89A00A02528 /* DI */ = {
 			isa = PBXGroup;
 			children = (
-				9EE496FB2A4AE8B800A02528 /* ServicesAssembly.swift */,
+				9EE496FB2A4AE8B800A02528 /* Assembly.swift */,
 			);
 			path = DI;
-			sourceTree = "<group>";
-		};
-		9EEAE1E42A37C39000AD5E91 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				9EEAE1E52A37C55200AD5E91 /* LoginViewModel.swift */,
-			);
-			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		9EF500752A3876F000E548AE /* Services */ = {
@@ -493,10 +468,7 @@
 				9E20BD842A373B1A0061B14C /* WeatherApp.swift in Sources */,
 				9EDEB1FD2A484E41004E35E2 /* WeatherForecastRow.swift in Sources */,
 				9E97EFBF2A4AF6C9001721C7 /* WeatherFlowFactory.swift in Sources */,
-				9EE496FC2A4AE8B800A02528 /* ServicesAssembly.swift in Sources */,
-				9EEAE1E62A37C55200AD5E91 /* LoginViewModel.swift in Sources */,
-				9EF5007C2A388EEB00E548AE /* LoginViewFactory.swift in Sources */,
-				9EF5007A2A388D2800E548AE /* FlowViewFactory.swift in Sources */,
+				9EE496FC2A4AE8B800A02528 /* Assembly.swift in Sources */,
 				9EAF576E2A407A0600921C75 /* WeatherImage.swift in Sources */,
 				9EB9A9EA2A3CB5C60003B35F /* WeatherMapper.swift in Sources */,
 				9ED9BB4E2A4472F600C2F605 /* LocationService.swift in Sources */,

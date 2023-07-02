@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct LoginView: View {
-    var loginViewModel: LoginViewModel?
-    
+    @EnvironmentObject private var sessionStore: SessionStore
     @State private var loginTextField: String = ""
     @State private var passwordTextField: String = ""
     
@@ -64,8 +63,7 @@ private extension LoginView {
     
     func makeVKLoginButton() -> some View {
         NavigationLink {
-            LoginViewFactory
-                .makeVKAuthWebView(viewModel: loginViewModel)
+            AuthWebView()
                 .navigationBarBackButtonHidden(true)
         } label: {
             Text("Войти через ВКонтакте")

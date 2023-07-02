@@ -4,7 +4,7 @@ import WebKit
 
 struct AuthWebView: UIViewRepresentable {
     
-    var loginViewModel: LoginViewModel?
+    @EnvironmentObject private var sessionStore: SessionStore
     
     func makeUIView(context: Context) -> WKWebView {
         let webView = WKWebView()
@@ -28,10 +28,7 @@ struct AuthWebView: UIViewRepresentable {
         let coordinator = AuthWebViewCoordinator()
         
         coordinator.onTokenReceived = { (token, time) in
-            self.loginViewModel?.updateSession(
-                token: token,
-                expirationTime: time
-            )
+            self.sessionStore.updateSession(token: token, expirationTime: time)
         }
         
         return coordinator
@@ -70,9 +67,9 @@ class AuthWebViewCoordinator: NSObject, WKNavigationDelegate {
         
         if
             let token = params[Constants.accessTokenQueryParameter],
-            let time = TimeInterval(params[Constants.expireTimeToken] ?? "")
+            let expirationTime = TimeInterval(params[Constants.expireTimeToken] ?? "")
         {
-            onTokenReceived?(token, time)
+            onTokenReceived?(token, expirationTime)
         }
         
         decisionHandler(.cancel)

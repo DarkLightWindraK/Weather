@@ -13,6 +13,8 @@ struct DetailForecastModel {
 
 struct LocationModel {
     let city: String
+    let latitude: Double
+    let longitude: Double
 }
 
 struct WeatherModel {

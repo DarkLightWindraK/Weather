@@ -2,7 +2,7 @@ import SwiftUI
 
 struct WeatherView: View {
     
-    @StateObject private var viewModel = WeatherViewModel()
+    @StateObject private var viewModel: WeatherViewModel = Assembly.shared.resolve()
     
     private var hourFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -29,7 +29,7 @@ struct WeatherView: View {
                     makeHourlyForecastView()
                 }
             }
-            .onChange(of: viewModel.currentCity ?? "") { newValue in
+            .onChange(of: viewModel.currentLocation?.city ?? "") { newValue in
                 viewModel.updateWeatherByCity(city: newValue)
             }
         }
@@ -55,10 +55,10 @@ private extension WeatherView {
     
     func makeCityView() -> some View {
         NavigationLink {
-            CityPicker(currentCity: $viewModel.currentCity)
+            CityPicker(currentLocation: $viewModel.currentLocation)
         } label: {
             HStack {
-                Text(viewModel.currentCity ?? "")
+                Text(viewModel.currentLocation?.city ?? "")
                     .font(.title3)
                     .bold()
                     .foregroundColor(.black)
@@ -110,7 +110,7 @@ private extension WeatherView {
             HStack(spacing: 16) {
                 ForEach(viewModel.hourlyForecast.prefix(5)) { item in
                     NavigationLink {
-                        WeatherFlowFactory.makeWeatherDetailsScreen(currentCity: viewModel.currentCity ?? "")
+                        WeatherFlowFactory.makeWeatherDetailsScreen(currentLocation: viewModel.currentLocation!)
                     } label: {
                         WeatherHourCell(
                             time: item.time,

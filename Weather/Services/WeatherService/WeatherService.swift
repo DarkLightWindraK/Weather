@@ -12,8 +12,9 @@ protocol WeatherService {
         for city: String
     ) -> AnyPublisher<ShortForecastModel?, Never>
     
-    func getForecastDetailsByCity(
-        for city: String
+    func getForecastDetailsByCoordinates(
+        latitude: Double,
+        longitude: Double
     ) -> AnyPublisher<DetailForecastModel?, Never>
     
     func getRelevantForecast(forecast: [HourForecastModel]) -> [HourForecastModel]
@@ -47,11 +48,12 @@ class WeatherServiceImpl: WeatherService {
             .eraseToAnyPublisher()
     }
     
-    func getForecastDetailsByCity(
-        for city: String
+    func getForecastDetailsByCoordinates(
+        latitude: Double,
+        longitude: Double
     ) -> AnyPublisher<DetailForecastModel?, Never> {
         apiClient
-            .requestPublisher(.getWeatherByCity(city: city, days: 14))
+            .requestPublisher(.getWeatherByCoordinates(latitude: latitude, longitude: longitude, days: 14))
             .map(\.data)
             .decode(type: WeatherResponse.self, decoder: JSONDecoder())
             .map { WeatherMapper.responseToForecastDetails(response: $0) }
