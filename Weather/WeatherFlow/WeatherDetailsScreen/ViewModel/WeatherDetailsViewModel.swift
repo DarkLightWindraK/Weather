@@ -18,7 +18,8 @@ class WeatherDetailsViewModel: ObservableObject {
         weatherService
             .getForecastDetailsByCoordinates(
                 latitude: currentLocation.latitude,
-                longitude: currentLocation.longitude
+                longitude: currentLocation.longitude,
+                days: 14
             )
             .sink { status in
                 switch status {

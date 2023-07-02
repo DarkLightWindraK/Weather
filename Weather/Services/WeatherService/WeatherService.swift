@@ -14,10 +14,9 @@ protocol WeatherService {
     
     func getForecastDetailsByCoordinates(
         latitude: Double,
-        longitude: Double
+        longitude: Double,
+        days: Int
     ) -> AnyPublisher<DetailForecastModel?, Never>
-    
-    func getRelevantForecast(forecast: [HourForecastModel]) -> [HourForecastModel]
 }
 
 class WeatherServiceImpl: WeatherService {
@@ -32,6 +31,25 @@ class WeatherServiceImpl: WeatherService {
             .map(\.data)
             .decode(type: WeatherResponse.self, decoder: JSONDecoder())
             .map { WeatherMapper.responseToShortForecastModel(response: $0) }
+            .map({ model in
+                let hours = model.nextFewHoursForecast
+                let nextHourDate = Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
+                let nextHour = Calendar.current.component(.hour, from: nextHourDate)
+                
+                guard nextHour < model.nextFewHoursForecast.count else {
+                    return ShortForecastModel(
+                        location: model.location,
+                        currentWeather: model.currentWeather,
+                        nextFewHoursForecast: []
+                    )
+                }
+                
+                return ShortForecastModel(
+                    location: model.location,
+                    currentWeather: model.currentWeather,
+                    nextFewHoursForecast: Array(model.nextFewHoursForecast[nextHour...])
+                )
+            })
             .replaceError(with: nil)
             .eraseToAnyPublisher()
     }
@@ -50,23 +68,15 @@ class WeatherServiceImpl: WeatherService {
     
     func getForecastDetailsByCoordinates(
         latitude: Double,
-        longitude: Double
+        longitude: Double,
+        days: Int
     ) -> AnyPublisher<DetailForecastModel?, Never> {
         apiClient
-            .requestPublisher(.getWeatherByCoordinates(latitude: latitude, longitude: longitude, days: 14))
+            .requestPublisher(.getWeatherByCoordinates(latitude: latitude, longitude: longitude, days: days))
             .map(\.data)
             .decode(type: WeatherResponse.self, decoder: JSONDecoder())
             .map { WeatherMapper.responseToForecastDetails(response: $0) }
             .replaceError(with: nil)
             .eraseToAnyPublisher()
-    }
-    
-    func getRelevantForecast(forecast: [HourForecastModel]) -> [HourForecastModel] {
-        let nextHourDate = Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
-        let nextHour = Calendar.current.component(.hour, from: nextHourDate)
-        
-        guard nextHour < forecast.count else { return [] }
-        
-        return Array(forecast[nextHour...])
     }
 }

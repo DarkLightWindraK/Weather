@@ -66,10 +66,7 @@ private extension WeatherViewModel {
             } receiveValue: { [weak self] response in
                 self?.currentLocation = response?.location
                 self?.currentWeather = response?.currentWeather
-                self?.hourlyForecast = self?.weatherService
-                    .getRelevantForecast(
-                        forecast: response?.nextFewHoursForecast ?? []
-                    ) ?? []
+                self?.hourlyForecast = response?.nextFewHoursForecast ?? []
                 self?.status = .ready
             }
             .store(in: &cancellables)
@@ -92,10 +89,7 @@ private extension WeatherViewModel {
             } receiveValue: { [weak self] response in
                 self?.currentLocation = response?.location
                 self?.currentWeather = response?.currentWeather
-                self?.hourlyForecast = self?.weatherService
-                    .getRelevantForecast(
-                        forecast: response?.nextFewHoursForecast ?? []
-                    ) ?? []
+                self?.hourlyForecast = response?.nextFewHoursForecast ?? []
                 self?.status = .ready
             }.store(in: &cancellables)
     }
