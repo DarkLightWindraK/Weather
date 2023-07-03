@@ -1,8 +1,6 @@
 ### Дизайн приложения
-<img src="https://i2.paste.pics/2e927ecb0532deb264a75dbf398a7365.png" width="300" height="650">
+<img src="https://github.com/DarkLightWindraK/Weather/assets/119159538/b724fdc4-17be-433c-b408-24c17724154b" width="300" height="650">
 
-<img src="https://i2.paste.pics/74f6cc451a1b4e5cd3adbe05005d5985.png" width="300" height="650">
+<img src="https://github.com/DarkLightWindraK/Weather/assets/119159538/85b67c5a-98a7-47d1-b884-a9c60a76450d" width="300" height="650">
 
-<img src="https://i2.paste.pics/64008aad4a38780e5bdc035e085d97b9.png" width="300" height="650">
-
-
+<img src="https://github.com/DarkLightWindraK/Weather/assets/119159538/a99e03cb-9c5e-4fa5-b89f-1988630c417a" width="300" height="650">
