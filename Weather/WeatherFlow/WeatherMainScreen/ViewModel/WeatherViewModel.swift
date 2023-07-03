@@ -22,7 +22,7 @@ class WeatherViewModel: NSObject, ObservableObject {
     }
     
     func requestCurrentForecast() {
-        locationService.getCurrentLocation { [weak self] location in
+        locationService.requestCurrentLocation { [weak self] location in
             self?.getWeatherByCoordinates(
                 location: location,
                 numberOfDays: 2
@@ -35,9 +35,17 @@ class WeatherViewModel: NSObject, ObservableObject {
         }
     }
     
-    func updateWeatherByCity(city: String) {
+    func updateWeatherByCoordinates(location: LocationModel?) {
+        guard let location else { return }
+        
         status = .loading
-        getWeatherByCity(city: city, numberOfDays: 2)
+        getWeatherByCoordinates(
+            location: CLLocation(
+                latitude: location.latitude,
+                longitude: location.longitude
+            ),
+            numberOfDays: 2
+        )
     }
 }
 

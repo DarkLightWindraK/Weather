@@ -11,7 +11,7 @@ struct DetailForecastModel {
     let dailyForecast: [DayForecastModel]
 }
 
-struct LocationModel {
+struct LocationModel: Equatable {
     let city: String
     let latitude: Double
     let longitude: Double

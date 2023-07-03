@@ -17,10 +17,15 @@ protocol WeatherService {
         longitude: Double,
         days: Int
     ) -> AnyPublisher<DetailForecastModel?, Never>
+    
+    func getForecastDetailsByCity(
+        for city: String,
+        days: Int
+    ) -> AnyPublisher<DetailForecastModel?, Never>
 }
 
 class WeatherServiceImpl: WeatherService {
-    private let apiClient = MoyaProvider<WeatherAPI>()
+    private let apiClient: MoyaProvider<WeatherAPI> = Assembly.shared.resolve()
     
     func getShortForecastByCoordinates(
         latitude: Double,
@@ -72,6 +77,19 @@ class WeatherServiceImpl: WeatherService {
     ) -> AnyPublisher<DetailForecastModel?, Never> {
         apiClient
             .requestPublisher(.getWeatherByCoordinates(latitude: latitude, longitude: longitude, days: days))
+            .map(\.data)
+            .decode(type: WeatherResponse.self, decoder: JSONDecoder())
+            .map { WeatherMapper.responseToForecastDetails(response: $0) }
+            .replaceError(with: nil)
+            .eraseToAnyPublisher()
+    }
+    
+    func getForecastDetailsByCity(
+        for city: String,
+        days: Int
+    ) -> AnyPublisher<DetailForecastModel?, Never> {
+        apiClient
+            .requestPublisher(.getWeatherByCity(city: city, days: days))
             .map(\.data)
             .decode(type: WeatherResponse.self, decoder: JSONDecoder())
             .map { WeatherMapper.responseToForecastDetails(response: $0) }

@@ -2,30 +2,43 @@ import SwiftUI
 
 struct CityPicker: View {
     @Binding var currentLocation: LocationModel?
-    
-    @Environment(\.dismiss) private var dismiss
     @State private var currentUserInput = ""
     @StateObject private var viewModel: CityPickerViewModel = Assembly.shared.resolve()
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationView {
             List(viewModel.cities) { city in
-                Text(city.name)
-                    .onTapGesture {
-                        currentLocation = LocationModel(
-                            city: city.name,
-                            latitude: city.latitude,
-                            longitude: city.longitude
-                        )
-                        dismiss()
-                    }
+                HStack {
+                    Text(city.name)
+                    Spacer()
+                }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    currentLocation = LocationModel(
+                        city: city.name,
+                        latitude: city.latitude,
+                        longitude: city.longitude
+                    )
+                    dismiss()
+                }
             }.searchable(
                 text: $currentUserInput,
-                prompt: "Поиск города"
-            ).onChange(of: currentUserInput) { newValue in
-                viewModel.searchCityByRequest(text: newValue)
+                prompt: Constants.searchBarHint
+            ).onChange(of: currentUserInput) { text in
+                if !text.isEmpty {
+                    viewModel.searchCityByRequest(text: text)
+                } else {
+                    viewModel.cities = []
+                }
             }
         }
+    }
+}
+
+private extension CityPicker {
+    enum Constants {
+        static let searchBarHint = "Поиск города"
     }
 }
 

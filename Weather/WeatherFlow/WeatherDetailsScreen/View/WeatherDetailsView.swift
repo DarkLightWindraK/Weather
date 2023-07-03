@@ -2,7 +2,7 @@ import SwiftUI
 
 struct WeatherDetailsView: View {
     
-    @ObservedObject var viewModel: WeatherDetailsViewModel
+    @ObservedObject var viewModel: WeatherDetailsViewModel = Assembly.shared.resolve()
     
     private var hourFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -72,8 +72,6 @@ struct WeatherDetailsView: View {
 
 struct WeatherDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        WeatherDetailsView(
-            viewModel: WeatherDetailsViewModel(location: LocationModel(city: "VRN", latitude: 35, longitude: 35))
-        )
+        WeatherDetailsView()
     }
 }

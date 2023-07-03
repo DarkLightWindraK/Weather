@@ -6,35 +6,53 @@ class WeatherDetailsViewModel: ObservableObject {
     @Published var dailyForecast: [DayForecastModel] = []
     @Published var status: Status = .loading
     
-    private let currentLocation: LocationModel
-    private let weatherService: WeatherService = Assembly.shared.resolve()
+    private let locationService: LocationService
+    private let weatherService: WeatherService
     private var cancellables = Set<AnyCancellable>()
     
-    init(location: LocationModel) {
-        self.currentLocation = location
+    init(
+        locationService: LocationService,
+        weatherService: WeatherService
+    ) {
+        self.locationService = locationService
+        self.weatherService = weatherService
     }
     
     func getDetailForecast() {
-        weatherService
-            .getForecastDetailsByCoordinates(
-                latitude: currentLocation.latitude,
-                longitude: currentLocation.longitude,
+        var operation: AnyPublisher<DetailForecastModel?, Never>
+        
+        if let currentLocation = locationService.getLastSavedLocation() {
+            operation = weatherService.getForecastDetailsByCoordinates(
+                latitude: currentLocation.coordinate.latitude,
+                longitude: currentLocation.coordinate.longitude,
                 days: 14
             )
-            .sink { status in
-                switch status {
-                case .finished:
-                    break
-                case let .failure(error):
-                    print(error.localizedDescription)
-                    self.status = .fail
-                }
-            } receiveValue: { [weak self] model in
-                self?.currentWeather = model?.currentWeather
-                self?.dailyForecast = model?.dailyForecast ?? []
-                self?.status = .ready
+        } else {
+            operation = weatherService.getForecastDetailsByCity(
+                for: Constants.defaultCuty,
+                days: 14
+            )
+        }
+        operation.sink { status in
+            switch status {
+            case .finished:
+                break
+            case let .failure(error):
+                print(error.localizedDescription)
+                self.status = .fail
             }
-            .store(in: &cancellables)
+        } receiveValue: { [weak self] model in
+            self?.currentWeather = model?.currentWeather
+            self?.dailyForecast = model?.dailyForecast ?? []
+            self?.status = .ready
+        }
+        .store(in: &cancellables)
+    }
+}
+
+private extension WeatherDetailsViewModel {
+    enum Constants {
+        static let defaultCuty = "Moscow"
     }
 }
 

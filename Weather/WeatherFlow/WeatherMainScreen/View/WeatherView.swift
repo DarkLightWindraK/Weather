@@ -4,13 +4,6 @@ struct WeatherView: View {
     
     @StateObject private var viewModel: WeatherViewModel = Assembly.shared.resolve()
     
-    private var hourFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ru-RU")
-        formatter.dateFormat = "HH:mm"
-        return formatter
-    }
-    
     var body: some View {
         if viewModel.status == .loading {
             showLoadingView()
@@ -29,8 +22,8 @@ struct WeatherView: View {
                     makeHourlyForecastView()
                 }
             }
-            .onChange(of: viewModel.currentLocation?.city ?? "") { newValue in
-                viewModel.updateWeatherByCity(city: newValue)
+            .onChange(of: viewModel.currentLocation) { newValue in
+                viewModel.updateWeatherByCoordinates(location: newValue)
             }
         }
     }
@@ -71,6 +64,7 @@ private extension WeatherView {
     func makeCurrentWeatherView() -> some View {
         VStack(spacing: 48) {
             Text(viewModel.currentWeather?.state ?? "")
+                .frame(alignment: .center)
                 .font(.system(size: 22))
                 .bold()
             Text("\(viewModel.currentWeather?.temperature ?? 0)°")
@@ -110,7 +104,7 @@ private extension WeatherView {
             HStack(spacing: 16) {
                 ForEach(viewModel.hourlyForecast.prefix(5)) { item in
                     NavigationLink {
-                        WeatherFlowFactory.makeWeatherDetailsScreen(currentLocation: viewModel.currentLocation!)
+                        WeatherDetailsView()
                     } label: {
                         WeatherHourCell(
                             time: item.time,
