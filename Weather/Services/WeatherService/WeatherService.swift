@@ -25,7 +25,11 @@ protocol WeatherService {
 }
 
 class WeatherServiceImpl: WeatherService {
-    private let apiClient: MoyaProvider<WeatherAPI> = Assembly.shared.resolve()
+    private let apiClient: MoyaProvider<WeatherAPI>
+    
+    init(apiClient: MoyaProvider<WeatherAPI>) {
+        self.apiClient = apiClient
+    }
     
     func getShortForecastByCoordinates(
         latitude: Double,

@@ -17,20 +17,22 @@ class Assembly {
 private func makeContainer() -> Container {
     let container = Container()
     
+    container.register(MoyaProvider<WeatherAPI>.self) { _ in
+        MoyaProvider<WeatherAPI>()
+    }.inObjectScope(.container)
+    
     container.register(LocationService.self) { _ in
         LocationServiceImpl()
     }.inObjectScope(.container)
     
-    container.register(WeatherService.self) { _ in
-        WeatherServiceImpl()
+    container.register(WeatherService.self) { resolver in
+        WeatherServiceImpl(
+            apiClient: resolver.resolve(MoyaProvider<WeatherAPI>.self)!
+        )
     }.inObjectScope(.container)
     
     container.register(SessionStore.self) { _ in
         SessionStore()
-    }.inObjectScope(.container)
-    
-    container.register(MoyaProvider<WeatherAPI>.self) { _ in
-        MoyaProvider<WeatherAPI>()
     }.inObjectScope(.container)
     
     container.register(LoginViewModel.self) { resolver in
